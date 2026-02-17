@@ -1,0 +1,56 @@
+header h1 {
+    color: #f1f5f9;
+}
+
+header p {
+    color: #64748b;
+}
+
+.btn-check:checked + .btn-outline-success {
+    background: #10b981;
+    color: #0f172a;
+    border-color: #10b981;
+}
+
+.btn-check:checked + .btn-outline-warning {
+    background: #f59e0b;
+    color: #0f172a;
+    border-color: #f59e0b;
+}
+
+.btn-check:checked + .btn-outline-primary {
+    background: #3b82f6;
+    color: white;
+    border-color: #3b82f6;
+}
+
+.form-label {
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+#prix_div label {
+    color: #10b981;
+}
+
+#montant, #montant-total {
+    background: #0f172a;
+    color: #10b981;
+    font-weight: 700;
+}
+
+.alert-warning {
+    background: #451a03;
+    color: #fcd34d;
+    border-left: 3px solid #f59e0b;
+}
+
+.alert-info {
+    background: #0c4a6e;
+    color: #7dd3fc;
+    border-left: 3px solid #0ea5e9;
+}
+
+input::placeholder {
+    color: #0051c1;
+}
