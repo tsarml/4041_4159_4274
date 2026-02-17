@@ -3,7 +3,8 @@
 
 Flight::route('GET /',          fn() => (new DashboardController())->index());
 Flight::route('GET /dashboard', fn() => (new DashboardController())->index());
-
+Flight::route('GET /',        fn() => (new AccueilController())->index());
+Flight::route('GET /accueil', fn() => (new AccueilController())->index());
 
 Flight::route('GET /besoin',              fn()      => (new BesoinController())->index());
 Flight::route('GET /besoin/create',       fn()      => (new BesoinController())->create());

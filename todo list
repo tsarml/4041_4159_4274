@@ -1,0 +1,179 @@
+V1:
+
+-Configurer les fichiers racine :
+
+public/index.php (autoload Composer, require config, routes Flight, Flight::start())
+public/.htaccess (RewriteEngine On, routing vers index.php, protection src/)
+.env (variables DB_HOST, DB_NAME='4041_4159_4274', DB_USER, DB_PASS)
+composer.json (dependances, autoload pour src/)
+.gitignore (vendor/, .env, logs, cache)
+
+
+-Base de donnee :
+Creer BD '4041_4159_4274' (sql)
+config/database.php (PDO connexion)
+Inserer donnees test (villes: Antananarivo, Toamasina ; besoins: riz 10kg ; dons: 5kg riz, 100000Ar)
+
+
+
+-Definir les models (src/Models/) :
+
+Ville.php (villes: getAll(), getById(), create(), update(), delete())
+Besoin.php (besoins: getByVille(), create(), update(), getRestant() avec calcul attributions)
+Don.php (dons: getAll(), getByType(), updateQuantiteDispo(), checkDisponible())
+Attribution.php (create(), getByBesoin(), validateQuantite() avec règle erreur si > dispo)
+Todo.php (taches todo: getAll(), create(), updateStatus())
+User.php (pour login: checkCredentials(), getByUsername())
+
+
+-Definir les controllers (src/Controllers/) :
+
+LoginController.php (route /login GET/POST, check session, redirect dashboard)
+DashboardController.php (route /dashboard, fetch villes/besoins/attributions, calcul restants, render view)
+BesoinsController.php (routes /besoins/*, index pour liste, create/post, edit/delete)
+DonsController.php (routes /dons/*, index pour liste, create/post, edit/delete)
+AttributionsController.php (routes /attributions/*, create/post avec verif erreur quantite, liste)
+VillesController.php (routes /villes/*, pour gestion villes)
+TodoController.php (routes /todo/*, liste taches, add/edit)
+
+
+-Definir les views (src/Views/) :
+
+layout.php (global: header, nav, footer, liens CSS/JS)
+login.php (username/passwd, erreur message)
+dashboard.php (tableau villes: colonnes besoins, attribues, restants)
+saisie_besoins.php (form: select ville/type, input item/quantite/unite + erreurs)
+liste_besoins.php (tableau des besoins)
+saisie_dons.php (form: select type, input item/quantite/unite)
+liste_dons.php (tableau dons)
+attribution.php (form: select besoin/don, input quantite + alert erreur si > dispo)
+liste_attributions.php (tableau attributions par ville)
+gestion_villes.php (form add/edit villes)
+
+
+-Design :
+
+public/assets/css/style.css (theme : bleu/vert, fonts)
+Integrer Bootstrap (dans layout.php)
+Ajouter icônes/images (ex. logos dons, erreurs en rouge/vert succès)
+
+
+-Ajouter fonctionnalites :
+
+Login  (sessions, hash passwords)
+Règle gestion: erreur si quantite attribuee > don dispo (dans AttributionController)
+Calcul restants dans dashboard (besoins - sum attributions)
+Todo List interne (page /todo pour tracker taches app)
+
+
+-Teste :
+
+Test login/logout
+Test saisie besoins/dons (ex. riz 10kg, huile 5L, 100000Ar)
+Test attribution (ok pour 5kg, erreur pour 300000Ar > 100000Ar)
+Test dashboard (liste villes, besoins/attribues visibles)
+Test erreurs/validation forms (champs vides, quantites negatives)
+Test responsive (mobile/PC)
+
+
+
+
+V2:
+
+
+-Base de donnees :
+
+Modifier table besoin (ajouter colonne prix_unitaire)
+Creer table achat (id, ville_id, besoin_id, don_id, quantite, prix_unitaire, montant_total, date_achat, description, created_at)
+Ajouter cle etrangère don_id dans achat vers don(id)
+Mettre à jour donnees existantes (prix unitaires pour riz 4500Ar, huile 8000Ar, tôle 15000Ar, clous 3000Ar [pour test])
+
+-Definir les controllers (src/Controllers/) :
+
+AchatController.php (routes /achat/, index avec filtre ville, create avec dons argent disponibles et besoins avec prix, store avec verif solde, delete)
+RecapController.php (routes /recap/, index pour page, data pour endpoint AJAX retournant JSON stats)
+
+-Modifier controllers existants :
+
+BesoinController.php (ajouter prix_unitaire dans store() et update(), visible seulement pour nature/materiau)
+DashboardController.php (ajouter calcul total_achats et nb_achats par ville dans index())
+
+-Definir les views (src/Views/) :
+
+saisie_achat.php (form: select ville, select don argent avec solde, select besoin avec prix unitaire, input quantite, calcul auto montant total, date, description)
+liste_achats.php (tableau achats avec filtre ville, colonnes date/ville/article/quantite/prix/montant, total general)
+recapitulation.php (4 cartes stats: besoins totaux, besoins satisfaits, dons reçus, dons dispatches, bouton actualiser AJAX, dernière mise à jour)
+Modifier views existantes :
+saisie_besoins.php (ajouter champ prix unitaire conditionnel type nature/materiau, script JS affichage conditionnel)
+layout.php (ajouter menu Achats et Recap dans navbar)
+dashboard.php (ajouter affichage nb achats et montant total par ville dans card-footer)
+
+
+-Design :
+
+public/assets/css/style.css (thème bleu nuit #0f172a + vert emeraude #10b981)
+dashboard.css (stats cards hover, tableaux, progress bar)
+liste.css (tables listes besoins/dons/achats/attributions)
+saisie.css (formulaires avec boutons type radio stylises, calculs dynamiques)
+recap.css (cartes stats colorees, animation bouton actualiser)
+gestion_villes.css (sidebar gestion)
+
+
+-Ajouter fonctionnalites :
+
+Prix unitaires pour besoins nature/materiaux (saisie obligatoire si ces types)
+Achat avec dons argent (selection don avec solde restant, selection besoin avec prix, calcul auto montant, verif solde suffisant)
+Liste achats filtrable par ville (dropdown filtre, reset)
+Tableau de bord modifier (affichage montants achats par ville)
+Page recapitulation AJAX (bouton actualiser sans rechargement, stats globales montants)
+
+
+
+Tester :
+
+Test saisie prix unitaire sur besoin nature/materiau
+Test achat (selection don argent, calcul montant auto, erreur si solde insuffisant)
+Test liste achats avec filtre ville
+Test dashboard (affichage achats par ville)
+Test recap AJAX (bouton actualiser, donnees JSON)
+Test suppression achat 
+
+
+v3
+
+ Base de données
+Créer table reinitialisation (id, created_at) — pour tracer les réinitialisations
+Créer table vente (id, don_id, quantite, prix_vente, remise_pct, montant_total, description, created_at)
+Ajouter colonne valeur_unitaire dans table don (valeur réelle du don)
+Données test (valeurs unitaires pour dons existants)
+
+ Controllers
+ReinitController.php (route GET /reinitialiser — vide attributions/besoins/dons/ventes, réinsère données initiales du prof)
+VenteController.php (routes /vente/*, index, create avec vérif besoins non satisfaits, store avec calcul remise, delete)
+
+ Vente de dons
+Vérification : si le don à vendre correspond à un besoin non satisfait → erreur + liste des besoins bloquants
+Pourcentage de remise configurable (champ dans le formulaire ou config globale)
+Calcul automatique : montant_total = quantite × valeur_unitaire × (1 - remise/100)
+
+ Views
+reinitialiser.php (page confirmation avant réinitialisation)
+saisie_vente.php (select don, input quantite, input remise%, calcul auto montant, alerte si besoin non satisfait)
+liste_ventes.php (tableau des ventes avec montants)
+Modifier layout.php (ajouter Ventes dans navbar)
+Modifier dashboard.php (bouton réinitialiser déjà fait)
+
+ Routes à ajouter dans routes.php
+GET /reinitialiser → page confirmation
+POST /reinitialiser/confirmer → exécution réinitialisation
+GET /vente → liste ventes
+GET /vente/create → formulaire vente
+POST /vente/store → enregistrement avec vérifs
+GET /vente/delete/@id → suppression
+
+ Tests
+Bouton réinitialiser (remet données initiales)
+Vente don sans besoin bloquant (OK)
+Vente don avec besoin non satisfait (erreur + liste)
+Calcul remise automatique
+Liste ventes

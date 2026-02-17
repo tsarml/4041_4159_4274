@@ -1,0 +1,58 @@
+header h1 {
+    color: #f1f5f9;
+}
+
+.card h5 {
+    color: #64748b;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.card h3 {
+    color: #10b981;
+    font-size: 1.875rem;
+    font-weight: 700;
+}
+
+.table td{
+     background-color: #0f172a;
+      border-bottom: 1px solid #334155;
+    color: #94a3b8;
+}
+
+
+#besoins-totaux {
+    color: #3b82f6;
+}
+
+#dons-recus {
+    color: #f59e0b;
+}
+
+#dons-dispatch {
+    color: #ef4444;
+}
+
+.alert-info {
+    background: #1e293b;
+    border: 1px solid #334155;
+    color: #94a3b8;
+}
+
+#last-update {
+    color: #10b981;
+}
+
+.btn-primary i {
+    transition: transform 0.3s;
+}
+
+.btn-primary:hover i {
+    transform: rotate(180deg);
+}
+
+.card-header{
+    color: #64748b;
+    border-color: #334155;
+}
